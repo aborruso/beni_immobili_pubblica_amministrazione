@@ -25,7 +25,9 @@ find "$folder"/../data/raw -type f -name "*.zip" | while IFS= read -r file; do
 done
 
 # crea file parquet
-duckdb --csv -c "COPY (SELECT * REPLACE (regexp_replace(filename,'^.+/','') AS filename) FROM read_csv_auto('../data/raw/*.csv',filename=true,types={'id_bene':'VARCHAR','latitudine': 'FLOAT','longitudine': 'FLOAT','superficie_mq': 'FLOAT','cubatura_mc': 'FLOAT','sup_aree_pertinenziali_mq': 'FLOAT','superficie_di_riferimento_mq': 'FLOAT'},normalize_names=true,decimal_separator=',')) TO '"$folder"/../data/beni_immobili_pubblici.parquet' (FORMAT PARQUET, COMPRESSION 'zstd', ROW_GROUP_SIZE 100_000)"
+duckdb --csv -c "COPY (SELECT * REPLACE (regexp_replace(filename,'^.+/','') AS filename),TRY_CAST(NULLIF(regexp_replace(regexp_replace(canone_annuale,'^.+;.*',''),',','.'), '') AS FLOAT) AS canone_annuale_norm FROM read_csv_auto('"$folder"/../data/raw/*.csv',filename=true,types={'id_bene':'VARCHAR','latitudine': 'FLOAT','longitudine': 'FLOAT','superficie_mq': 'FLOAT','cubatura_mc': 'FLOAT','sup_aree_pertinenziali_mq': 'FLOAT','superficie_di_riferimento_mq': 'FLOAT'},normalize_names=true,decimal_separator=',')) TO '"$folder"/../data/beni_immobili_pubblici.parquet' (FORMAT PARQUET, COMPRESSION 'zstd', ROW_GROUP_SIZE 100_000)"
+
+exit 0
 
 # crea file csv.gz
 duckdb --csv -c "COPY (SELECT * FROM '"$folder"/../data/beni_immobili_pubblici.parquet') TO '"$folder"/../data/beni_immobili_pubblici.csv.gz'"
