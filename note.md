@@ -1,0 +1,6 @@
+- encoding non dichiarato e non standard
+- nomi campo human readable
+- schema dati soltanto human e senza info sul tipo campo
+- peccato soltanto il formato CSV
+- interessantissimo vederlo su loanboard
+- bellissimo lavoro ENEA
