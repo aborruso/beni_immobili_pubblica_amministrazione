@@ -4,3 +4,8 @@
 - peccato soltanto il formato CSV
 - interessantissimo vederlo su loanboard
 - bellissimo lavoro ENEA
+- Imm_Province_e_Citta_Metropolitane_2019 ha subcartella, mentre gli altri no
+- codici istat
+- qualche coordinata non corrisponde a luogo del bene. id_bene 2442321, ha coordinate 37.926914, 15.28337, con dati castatali coerenti (sembra Forza d'Agrò, in provincia di Messina), ma il comune del bene è Frascati
+- pubblicarlo sul portale nazionale dati
+- 45 senza coordinate
