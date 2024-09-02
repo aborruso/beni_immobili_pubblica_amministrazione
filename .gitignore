@@ -1,3 +1,5 @@
 tmp.*
 script/tmp
 data/raw/*
+rill/*
+quarto/
