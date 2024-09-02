@@ -51,8 +51,6 @@ duckdb --csv -c "COPY (
 
 # Da qui in poi lo script "esce". Ma c'è il codice per creare il file csv.gz e il file geo parquet.
 
-exit 0
-
 # crea file csv.gz
 duckdb --csv -c "COPY (SELECT * FROM '"$folder"/../data/beni_immobili_pubblici.parquet') TO '"$folder"/../data/beni_immobili_pubblici.csv.gz'"
 
