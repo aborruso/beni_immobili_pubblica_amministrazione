@@ -25,25 +25,17 @@ find "$folder"/../data/raw -type f -name "*.zip" | while IFS= read -r file; do
 done
 
 # crea file parquet
-duckdb --csv -c "COPY (
+duckdb -c "COPY (
   SELECT
     * REPLACE (regexp_replace(filename, '^.+/', '') AS filename)
   FROM
     read_csv_auto(
       '$folder/../data/raw/*.csv',
       filename = TRUE,
-      types = { 'id_bene': 'VARCHAR',
-      'id_compendio': 'VARCHAR',
-      'latitudine': 'FLOAT',
-      'longitudine': 'FLOAT',
-      'superficie_mq': 'FLOAT',
-      'cubatura_mc': 'FLOAT',
-      'sup_aree_pertinenziali_mq': 'FLOAT',
-      'superficie_di_riferimento_mq': 'FLOAT' },
       normalize_names = TRUE,
       decimal_separator = ','
     )
-) TO '$folder/../data/beni_immobili_pubblici.parquet' (
+) TO 'beni_immobili_pubblici.parquet' (
   FORMAT PARQUET,
   COMPRESSION 'zstd',
   ROW_GROUP_SIZE 100_000
