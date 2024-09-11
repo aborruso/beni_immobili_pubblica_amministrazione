@@ -62,7 +62,7 @@ find "$folder"/../data/raw -type f -name "*.csv" -delete
 duckdb -c "LOAD h3;COPY (
   SELECT
     h3_cell_to_boundary_wkt(h3_latlng_to_cell(latitudine, longitudine, 5)):: geometry geom,
-    COUNT(*) AS num_recs
+    COUNT(*) AS conteggio_immobili
   FROM
     '../data/beni_immobili_pubblici_geo.parquet'
   GROUP BY
