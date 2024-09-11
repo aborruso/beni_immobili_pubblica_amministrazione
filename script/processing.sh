@@ -35,7 +35,7 @@ duckdb -c "COPY (
       normalize_names = TRUE,
       decimal_separator = ','
     )
-) TO 'beni_immobili_pubblici.parquet' (
+) TO '../data/beni_immobili_pubblici.parquet' (
   FORMAT PARQUET,
   COMPRESSION 'zstd',
   ROW_GROUP_SIZE 100_000
@@ -57,3 +57,19 @@ find "$folder"/tmp -type f -name "tmp.fgb" -delete
 
 # elima tutti i file csv in ../data/raw/. usa find e -delete
 find "$folder"/../data/raw -type f -name "*.csv" -delete
+
+# crea griglia H3 di livello 5
+duckdb -c "LOAD h3;COPY (
+  SELECT
+    h3_cell_to_boundary_wkt(h3_latlng_to_cell(latitudine, longitudine, 5)):: geometry geom,
+    COUNT(*) AS num_recs
+  FROM
+    '../data/beni_immobili_pubblici_geo.parquet'
+  GROUP BY
+    1
+) TO '../data/beni_immobili_pubblici_h3_5.gpkg' WITH (
+  FORMAT GDAL,
+  DRIVER 'GPKG',
+  LAYER_CREATION_OPTIONS 'WRITE_BBOX=YES',
+  SRS 'EPSG:4326'
+);"
